@@ -1,0 +1,8 @@
+time complexities - 
+Stack using two queues - push O(1), pop O(n)
+Single Linked Lists -  O(1)
+Stack using Linked Lists - Push Operations - O(1), Pop Operations - O(1)
+Hashing - 0(1)
+Insertion Sort - O(n2)
+Heap Sort - O(nlogn)
+Quick Sort - Average O(nlogn)

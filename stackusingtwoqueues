@@ -1,0 +1,204 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 3
+int queue1[SIZE];
+int queue2[SIZE];
+int front1 = -1, rear1 = -1;
+int front2 = -1, rear2 = -1;
+// check if queue1 is empty
+int
+isEmptyQueue1 ()
+{
+  return front1 == -1;
+}
+
+// check if queue2 is empty
+int
+isEmptyQueue2 ()
+{
+  return front2 == -1;
+}
+
+// check if queue1 is full
+int
+isFullQueue1 ()
+{
+  return rear1 == SIZE - 1;
+}
+
+// check if queue2 is full
+int
+isFullQueue2 ()
+{
+  return rear2 == SIZE - 1;
+}
+
+// Function to enqueue an element to queue1
+void
+enqueueQueue1 (int item)
+{
+  if (isFullQueue1 ())
+    {
+      printf ("Overflow\n");
+      return;
+    }
+  if (front1 == -1)
+    {
+      front1 = 0;
+    }
+  queue1[++rear1] = item;
+}
+
+// Function to enqueue an element to queue2
+void
+enqueueQueue2 (int item)
+{
+  if (isFullQueue2 ())
+    {
+      printf ("Overflow\n");
+      return;
+    }
+  if (front2 == -1)
+    {
+      front2 = 0;
+    }
+  queue2[++rear2] = item;
+}
+
+// Function to dequeue an element from queue1
+int
+dequeueQueue1 ()
+{
+  if (isEmptyQueue1 ())
+    {
+      printf ("Queue 1 Underflow\n");
+      return -1;
+    }
+  int item = queue1[front1++];
+  if (front1 > rear1)
+    {
+      front1 = rear1 = -1;
+    }
+  return item;
+}
+
+// Function to dequeue an element from queue2
+int
+dequeueQueue2 ()
+{
+  if (isEmptyQueue2 ())
+    {
+      printf ("Queue 2 Underflow\n");
+      return -1;
+    }
+  int item = queue2[front2++];
+  if (front2 > rear2)
+    {
+      front2 = rear2 = -1;
+    }
+  return item;
+}
+
+// Function to push an element
+void
+push (int item)
+{
+  if (isEmptyQueue1 ())
+    {
+      enqueueQueue1 (item);
+      while (!isEmptyQueue2 ())
+	{
+	  enqueueQueue1 (dequeueQueue2 ());
+	}
+    }
+  else
+    {
+      enqueueQueue2 (item);
+      while (!isEmptyQueue1 ())
+	{
+	  enqueueQueue2 (dequeueQueue1 ());
+	}
+    }
+}
+
+// Function to pop an element
+int
+pop ()
+{
+  if (isEmptyQueue1 () && isEmptyQueue2 ())
+    {
+      printf ("Stack is empty\n");
+      return -1;
+    }
+  if (!isEmptyQueue1 ())
+    {
+      return dequeueQueue1 ();
+    }
+  else
+    {
+      return dequeueQueue2 ();
+    }
+}
+
+void
+display ()
+{
+  int i;
+  if (isEmptyQueue1 () && isEmptyQueue2 ())
+    {
+      printf ("Stack is empty\n");
+      return;
+    }
+  printf ("Stack elements: ");
+  if (!isEmptyQueue1 ())
+    {
+      for (i = front1; i <= rear1; i++)
+	{
+	  printf ("%d ", queue1[i]);
+	}
+    }
+  else
+    {
+      for (i = front2; i <= rear2; i++)
+	{
+	  printf ("%d ", queue2[i]);
+	}
+    }
+  printf ("\n");
+}
+
+int
+main ()
+{
+  int choice, item;
+  while (1)
+    {
+      printf ("\nStack Menu:\n");
+      printf ("1. Push\n2. Pop\n3. Display\n4. Exit\n");
+      printf ("Enter your choice: ");
+      scanf ("%d", &choice);
+      switch (choice)
+	{
+	case 1:
+	  printf ("Enter an element to push: ");
+	  scanf ("%d", &item);
+	  push (item);
+	  break;
+	case 2:
+	  item = pop ();
+	  if (item != -1)
+	    {
+	      printf ("Popped element: %d\n", item);
+	    }
+	  break;
+	case 3:
+	  display ();
+	  break;
+	case 4:
+	  exit (0);
+	default:
+	  printf ("Invalid choice. Please try again.\n");
+	}
+    }
+  return 0;
+}
